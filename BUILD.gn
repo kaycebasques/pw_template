@@ -15,7 +15,6 @@
 import("//build_overrides/pigweed.gni")
 import("$dir_pw_build/python.gni")
 import("$dir_pw_build/python_dist.gni")
-import("$dir_pw_build/python_venv.gni")
 
 ##############
 # Applications
@@ -37,39 +36,19 @@ group("app") {
 }
 
 ###################
-# Build environment
+# Python tooling
 ###################
 
 pw_python_group("python") {
   python_deps = [
-    ":pip_install_project_tools",
+    "$dir_pw_env_setup:python",
+    ":install_tools",
   ]
 }
 
-_python_packages = [
-    # In-tree project packages.
+pw_python_pip_install("install_tools") {
+  packages = [
     "//tools:tools",
-    # Pigweed packages.
-    "$dir_pw_env_setup:core_pigweed_python_packages",
-]
-
-pw_python_venv("project_build_venv") {
-  path = "$root_build_dir/python-venv"
-  constraints = pw_build_PIP_CONSTRAINTS
-  requirements = pw_build_PIP_REQUIREMENTS
-  source_packages = _python_packages
-}
-
-pw_create_python_source_tree("generate_project_tools_python_distribution") {
-  packages = _python_packages
-  generate_setup_cfg = {
-    name = "project-tools"
-    version = "0.0.1"
-    append_date_to_version = true
-    include_default_pyproject_file = true
-  }
-}
-
-pw_internal_pip_install("pip_install_project_tools") {
-  packages = [ ":generate_project_tools_python_distribution" ]
+  ]
+  editable = true
 }

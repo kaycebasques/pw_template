@@ -18,6 +18,4 @@ default_args = {
   dir_pw_third_party_nanopb = "//third_party/nanopb"
   dir_pw_third_party_freertos = "//third_party/freertos"
   PICO_SRC_DIR = "//environment/packages/pico_sdk"
-  pw_build_USE_NEW_PYTHON_BUILD = true
-  pw_build_PYTHON_BUILD_VENV = "//:project_build_venv"
 }
